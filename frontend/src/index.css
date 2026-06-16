@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Elegant, sleek custom scrollbar for enterprise feel */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-800 rounded-full hover:bg-slate-400 dark:hover:bg-slate-700 transition-colors duration-150;
+  }
+
+  body {
+    background-image: radial-gradient(at 0% 0%, rgba(30, 41, 59, 0.15) 0, transparent 50%),
+                      radial-gradient(at 50% 0%, rgba(0, 127, 255, 0.05) 0, transparent 50%);
+  }
+
+  body.dark {
+    background-image: radial-gradient(at 0% 0%, rgba(15, 23, 42, 0.9) 0, transparent 50%),
+                      radial-gradient(at 50% 0%, rgba(0, 127, 255, 0.08) 0, transparent 50%);
+  }
+}
+
+@layer components {
+  /* Premium Glassmorphism styling blocks */
+  .glass-panel {
+    @apply bg-white/70 dark:bg-slate-850/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/40 shadow-lg shadow-slate-900/5 dark:shadow-black/20;
+  }
+
+  .glass-panel-hover {
+    @apply hover:bg-white/80 dark:hover:bg-slate-850/85 hover:border-slate-300/60 dark:hover:border-slate-800/80 transition-all duration-200;
+  }
+
+  .glass-input {
+    @apply bg-white/50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sidesi-500/50 focus:border-sidesi-500 backdrop-blur-sm transition-all duration-150;
+  }
+
+  .glass-button-primary {
+    @apply bg-sidesi-500 hover:bg-sidesi-600 text-white font-medium py-2 px-4 rounded-lg shadow-lg shadow-sidesi-500/10 hover:shadow-sidesi-500/25 active:scale-95 transition-all duration-150 flex items-center justify-center gap-2;
+  }
+
+  .glass-button-secondary {
+    @apply bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/70 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-700/50 font-medium py-2 px-4 rounded-lg active:scale-95 transition-all duration-150 flex items-center justify-center gap-2;
+  }
+
+  .glass-card-header {
+    @apply border-b border-slate-200/50 dark:border-slate-800/40 pb-4 mb-4;
+  }
+  
+  /* Timeline node styling */
+  .timeline-border {
+    background-image: linear-gradient(to bottom, #3b82f6 30%, rgba(255, 255, 255, 0) 0%);
+    background-position: left;
+    background-size: 2px 10px;
+    background-repeat: repeat-y;
+  }
+}
+
+/* Beautiful dynamic background grid */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 127, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 127, 255, 0.03) 1px, transparent 1px);
+}
+.dark .bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(0, 127, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 127, 255, 0.015) 1px, transparent 1px);
+}
