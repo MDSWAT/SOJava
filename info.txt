@@ -1,0 +1,12 @@
+rootname > osboxes
+root pass: administrator
+
+user1 login> vatamaniuc
+usr1pass> Linux
+
+user2>jo
+user2pass> user2
+
+user3> test2
+user3pass> test2
+
