@@ -1,4 +1,10 @@
-# ─── Python / Django ──────────────────────────────────────────────────────────
+# Backup files & SQL dumps
+*.sql
+backup_*.sql
+*_backup.sql
+data/
+
+─── Python / Django ──────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo

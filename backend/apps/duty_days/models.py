@@ -99,6 +99,10 @@ class SaturdayBooking(models.Model):
         max_length=20, choices=COMP_OPTION_CHOICES, default='decide_later'
     )
     recovery_date = models.DateField(null=True, blank=True)
+    free_day_credited = models.BooleanField(
+        default=False,
+        help_text='Indică dacă această sâmbătă a fost creditată ca zi liberă în balanță'
+    )
     booked_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -212,6 +216,7 @@ class LeaveRequest(models.Model):
         ('medical', 'Concediu Medical'),
         ('unpaid',  'Concediu Fără Plată'),
         ('other',   'Alt Concediu'),
+        ('absence', 'Absență / Lipsă'),
     ]
     STATUS_CHOICES = [
         ('draft',    'Ciornă'),

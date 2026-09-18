@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -32,4 +34,7 @@ urlpatterns = [
     path('api/v1/personal-vault/', include('apps.personal_vault.urls')),
     path('api/v1/audit-logs/', include('apps.audit.urls')),
     path('api/v1/duty-days/', include('apps.duty_days.urls')),
-]
+    path('api/v1/inventory/', include('apps.inventory.urls')),
+    path('api/v1/virtual-ecc/', include('apps.virtual_ecc.urls')),
+    path('api/v1/posta-contacts/', include('apps.posta_contacts.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

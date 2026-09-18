@@ -10,7 +10,11 @@ from apps.duty_days.views import (
     AdjustBalanceView,
     MarkAbsentView,
     ActivityLogsView,
+    ActivityLogsExportView,
     UserDetailView,
+    UserReportView,
+    UserReportExportView,
+    AllUsersReportExportView,
 )
 
 router = DefaultRouter()
@@ -29,9 +33,13 @@ urlpatterns = [
     path('balance/adjust/', AdjustBalanceView.as_view(), name='adjust-balance'),
     path('balance/mark-absent/', MarkAbsentView.as_view(), name='mark-absent'),
 
-    # Activity logs
+    # Activity logs & export
     path('logs/', ActivityLogsView.as_view(), name='activity-logs'),
+    path('logs/export/', ActivityLogsExportView.as_view(), name='activity-logs-export'),
 
-    # Admin: per-user detail
+    # Admin: Reports & Detail
     path('users/<uuid:user_id>/detail/', UserDetailView.as_view(), name='user-detail'),
+    path('users/<uuid:user_id>/report/', UserReportView.as_view(), name='user-report'),
+    path('users/<uuid:user_id>/report/export/', UserReportExportView.as_view(), name='user-report-export'),
+    path('reports/all-users/export/', AllUsersReportExportView.as_view(), name='all-users-report-export'),
 ]

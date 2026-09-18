@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { 
   Plus, Search, Star, Shield, ShieldAlert, Key, 
   FileText, Link as LinkIcon, CreditCard, ClipboardCopy, 
@@ -257,7 +258,7 @@ export const PersonalVault: React.FC = () => {
               className={`py-1.5 px-3 rounded-lg text-xs font-semibold active:scale-95 transition-all duration-150 ${
                 selectedCategory === cat.value
                   ? 'bg-sidesi-500 text-white shadow shadow-sidesi-500/10'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/40'
               }`}
             >
               {cat.label}
@@ -289,7 +290,7 @@ export const PersonalVault: React.FC = () => {
                 setFavoritesOnly(e.target.checked);
                 setCurrentPage(1);
               }}
-              className="rounded border-slate-700 accent-sidesi-500 text-white w-4.5 h-4.5"
+              className="rounded border-slate-300 dark:border-slate-700 accent-sidesi-500 text-white w-4.5 h-4.5"
             />
             <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
             <span>Doar Favorite</span>
@@ -303,8 +304,8 @@ export const PersonalVault: React.FC = () => {
       ) : error ? (
         <div className="p-8 text-center glass-panel rounded-2xl space-y-2">
           <ShieldAlert className="w-12 h-12 text-rose-500 mx-auto" />
-          <h3 className="font-bold text-white text-md">Eroare de securitate</h3>
-          <p className="text-xs text-slate-400">{error}</p>
+          <h3 className="font-bold text-slate-900 dark:text-white text-md">Eroare de securitate</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{error}</p>
         </div>
       ) : items.length > 0 ? (
         <div className="space-y-4">
@@ -468,21 +469,21 @@ export const PersonalVault: React.FC = () => {
       ) : (
         <div className="text-center py-20 glass-panel rounded-2xl space-y-3">
           <Shield className="w-12 h-12 mx-auto text-slate-400 stroke-1 animate-pulse-subtle" />
-          <h3 className="font-bold text-white text-md">Seiful tău personal este gol</h3>
-          <p className="text-xs text-slate-400">Păstrează în siguranță coduri PIN, note secrete sau parole de acces privat.</p>
+          <h3 className="font-bold text-slate-900 dark:text-white text-md">Seiful tău personal este gol</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Păstrează în siguranță coduri PIN, note secrete sau parole de acces privat.</p>
         </div>
       )}
 
       {/* Create / Edit Form Modal */}
-      {isFormOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm" onClick={() => setIsFormOpen(false)} />
+      {isFormOpen && ReactDOM.createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/60 dark:bg-slate-950/60 backdrop-blur-sm" onClick={() => setIsFormOpen(false)} />
           <div className="relative w-full max-w-lg glass-panel p-6 rounded-2xl z-10 max-h-[90vh] overflow-y-auto space-y-4">
-            <div className="flex justify-between items-center pb-3 border-b border-slate-850">
-              <h3 className="text-lg font-bold text-white">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-850">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                 {editingItem ? 'Editează Secret Personal' : 'Adaugă un Nou Secret Personal'}
               </h3>
-              <button onClick={() => setIsFormOpen(false)} className="text-slate-400 hover:text-white p-1">
+              <button onClick={() => setIsFormOpen(false)} className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -490,7 +491,7 @@ export const PersonalVault: React.FC = () => {
             <form onSubmit={handleFormSubmit} className="space-y-4 text-xs font-semibold">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-slate-400">Titlu Secret*</label>
+                  <label className="text-slate-600 dark:text-slate-400">Titlu Secret*</label>
                   <input
                     type="text"
                     value={formTitle}
@@ -501,7 +502,7 @@ export const PersonalVault: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-slate-400">Categorie*</label>
+                  <label className="text-slate-600 dark:text-slate-400">Categorie*</label>
                   <select
                     value={formCategory}
                     onChange={(e) => setFormCategory(e.target.value as any)}
@@ -519,7 +520,7 @@ export const PersonalVault: React.FC = () => {
               {formCategory !== 'note' && (
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-slate-400">
+                    <label className="text-slate-600 dark:text-slate-400">
                       {formCategory === 'card' ? 'Număr Card' : 'Nume Utilizator / Login'}
                     </label>
                     <input
@@ -531,7 +532,7 @@ export const PersonalVault: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-slate-400">Link URL / Adresă Web</label>
+                    <label className="text-slate-600 dark:text-slate-400">Link URL / Adresă Web</label>
                     <input
                       type="url"
                       value={formUrl}
@@ -545,9 +546,9 @@ export const PersonalVault: React.FC = () => {
 
               {/* Password wrapper */}
               {formCategory !== 'link' && formCategory !== 'note' && (
-                <div className="space-y-1.5 pt-2 border-t border-slate-800/40">
+                <div className="space-y-1.5 pt-2 border-t border-slate-200/50 dark:border-slate-800/40">
                   <div className="flex justify-between items-center">
-                    <label className="text-slate-400">
+                    <label className="text-slate-600 dark:text-slate-400">
                       {formCategory === 'card' ? 'Cod PIN / CVV' : (editingItem ? 'Schimbă Parola (lasă gol pentru a păstra)' : 'Parolă Secretă*')}
                     </label>
                     <button
@@ -584,8 +585,8 @@ export const PersonalVault: React.FC = () => {
               )}
 
               {/* Note text field */}
-              <div className="space-y-1 pt-2 border-t border-slate-800/40">
-                <label className="text-slate-400">
+              <div className="space-y-1 pt-2 border-t border-slate-200/50 dark:border-slate-800/40">
+                <label className="text-slate-600 dark:text-slate-400">
                   {formCategory === 'note' ? 'Conținut Notă Securizată*' : 'Observații / Note suplimentare'}
                 </label>
                 <textarea
@@ -604,16 +605,16 @@ export const PersonalVault: React.FC = () => {
                   id="formFav"
                   checked={formFavorite}
                   onChange={(e) => setFormFavorite(e.target.checked)}
-                  className="rounded border-slate-800 text-white accent-sidesi-500 w-4.5 h-4.5 cursor-pointer"
+                  className="rounded border-slate-300 dark:border-slate-800 text-white accent-sidesi-500 w-4.5 h-4.5 cursor-pointer"
                 />
-                <label htmlFor="formFav" className="text-slate-350 cursor-pointer flex items-center gap-1">
+                <label htmlFor="formFav" className="text-slate-600 dark:text-slate-350 cursor-pointer flex items-center gap-1">
                   <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                   <span>Marchează ca Favorit</span>
                 </label>
               </div>
 
               {/* Footer buttons */}
-              <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-850">
+              <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-200 dark:border-slate-850">
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
@@ -631,7 +632,7 @@ export const PersonalVault: React.FC = () => {
             </form>
           </div>
         </div>
-      )}
+      , document.body)}
 
       {/* Delete personal prompt */}
       <ConfirmDialog

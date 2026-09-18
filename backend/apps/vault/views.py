@@ -173,9 +173,8 @@ class PasswordVaultViewSet(viewsets.ModelViewSet):
                 
             headers = [self._normalize_header(h) for h in rows[0]]
             
-            print(f"IMPORT DEBUG: Active Sheet Title: {ws.title}")
-            print(f"IMPORT DEBUG: Total Rows Detected: {len(rows)}")
-            print(f"IMPORT DEBUG: Normalized Headers: {headers}")
+            # Debug logs removed to avoid Windows console encoding errors with Romanian characters
+            pass
             
             # Flexible header mapping
             org_keys = ['organizatia', 'organizatie', 'org']
@@ -199,7 +198,7 @@ class PasswordVaultViewSet(viewsets.ModelViewSet):
             email_idx = find_header_index(email_keys)
             phone_idx = find_header_index(phone_keys)
 
-            print(f"IMPORT DEBUG: Mapped Indexes -> Org: {org_idx}, Title: {title_idx}, Login: {login_idx}, Password: {pass_idx}, Email: {email_idx}, Phone: {phone_idx}")
+            pass
 
             if org_idx == -1 or title_idx == -1 or login_idx == -1 or pass_idx == -1:
                 missing = []
@@ -233,7 +232,7 @@ class PasswordVaultViewSet(viewsets.ModelViewSet):
                         err_msg = f"Rândul {row_num}: Date incomplete (Câmpurile {', '.join(reason)} sunt obligatorii)."
                         errors.append(err_msg)
                         skipped_count += 1
-                        print(f"IMPORT DEBUG: Rândul {row_num} ignorat (date incomplete): {reason}. Row content: {row[:5]}")
+                        pass
                         continue
 
                     # Duplicate check within the uploaded Excel file
@@ -242,7 +241,7 @@ class PasswordVaultViewSet(viewsets.ModelViewSet):
                         err_msg = f"Rândul {row_num}: Credențial duplicat detectat în cadrul fișierului Excel ({org_name} - {title} - {login})."
                         errors.append(err_msg)
                         skipped_count += 1
-                        print(f"IMPORT DEBUG: Rândul {row_num} ignorat (duplicat în fișier): {org_name} - {title} - {login}")
+                        pass
                         continue
 
                     # Clean organization name (normalize whitespace only, keeping underscores and dashes intact)
@@ -276,7 +275,7 @@ class PasswordVaultViewSet(viewsets.ModelViewSet):
                         err_msg = f"Rândul {row_num}: Credențial existent în baza de date pentru această organizație ({org_name} - {title} - {login})."
                         errors.append(err_msg)
                         skipped_count += 1
-                        print(f"IMPORT DEBUG: Rândul {row_num} ignorat (duplicat în DB): {org_name} - {title} - {login}")
+                        pass
                         seen_keys.add(row_key)
                         continue
 

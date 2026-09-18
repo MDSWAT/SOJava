@@ -6,7 +6,8 @@ from apps.authentication.views import (
     CurrentUserView,
     UserViewSet,
     RoleViewSet,
-    PermissionViewSet
+    PermissionViewSet,
+    DashboardStatsView
 )
 
 router = DefaultRouter()
@@ -21,6 +22,9 @@ urlpatterns = [
     
     # Active Session User info
     path('me/', CurrentUserView.as_view(), name='current_user'),
+
+    # Centralized Dashboard Stats
+    path('dashboard-stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
     
     # REST API resources
     path('', include(router.urls)),

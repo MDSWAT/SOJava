@@ -41,9 +41,10 @@ class SaturdayBookingSerializer(serializers.ModelSerializer):
         model = SaturdayBooking
         fields = [
             'id', 'user', 'user_detail', 'comp_option',
-            'comp_option_display', 'recovery_date', 'booked_at'
+            'comp_option_display', 'recovery_date',
+            'free_day_credited', 'booked_at'
         ]
-        read_only_fields = ['id', 'user', 'comp_option_display', 'booked_at']
+        read_only_fields = ['id', 'user', 'comp_option_display', 'free_day_credited', 'booked_at']
 
 
 class SaturdayDutySerializer(serializers.ModelSerializer):

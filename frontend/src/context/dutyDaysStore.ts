@@ -2,7 +2,8 @@ import { create } from 'zustand';
 import api from '@/services/api';
 import {
   CalendarEvent, Saturday, MyBalanceResponse,
-  UserBalanceKPI, ActivityLog, LeaveRequest, LeaveSummaryUser
+  UserBalanceKPI, ActivityLog, LeaveRequest, LeaveSummaryUser,
+  UserDetailedReport
 } from '@/types';
 
 interface DutyDaysState {
@@ -18,9 +19,12 @@ interface DutyDaysState {
   // ── My data ──────────────────────────────────────────────────────────────
   myData: MyBalanceResponse | null;
 
-  // ── Admin ─────────────────────────────────────────────────────────────────
+  // ── Admin & Reports ───────────────────────────────────────────────────────
   allBalances: UserBalanceKPI[];
   adminLogs: ActivityLog[];
+  adminLogsCount: number;
+  currentReport: UserDetailedReport | null;
+  isLoadingReport: boolean;
 
   // ── Leave (Concediu) ──────────────────────────────────────────────────────
   myLeaves: LeaveRequest[];
@@ -67,6 +71,14 @@ interface DutyDaysState {
   adjustBalance: (userId: string, daysToRecover: number, freeDaysAvailable: number, reason?: string) => Promise<boolean>;
   markUserAbsent: (userId: string, date: string) => Promise<boolean>;
   fetchAdminLogs: (userId?: string) => Promise<void>;
+  fetchFilteredAdminLogs: (filters?: { userId?: string; action?: string; search?: string; startDate?: string; endDate?: string }) => Promise<void>;
+  exportAdminLogsExcel: (filters?: { userId?: string; action?: string; search?: string; startDate?: string; endDate?: string }) => Promise<void>;
+
+  // Reports
+  fetchUserReport: (userId: string, year?: number) => Promise<UserDetailedReport | null>;
+  exportUserReportExcel: (userId: string, year?: number) => Promise<void>;
+  exportAllUsersReportExcel: (year?: number) => Promise<void>;
+  clearCurrentReport: () => void;
 
   // Leave (Concediu)
   fetchMyLeaves: () => Promise<void>;
@@ -101,6 +113,9 @@ export const useDutyDaysStore = create<DutyDaysState>((set, get) => ({
   myData: null,
   allBalances: [],
   adminLogs: [],
+  adminLogsCount: 0,
+  currentReport: null,
+  isLoadingReport: false,
 
   myLeaves: [],
   allLeaves: [],
@@ -111,6 +126,7 @@ export const useDutyDaysStore = create<DutyDaysState>((set, get) => ({
   error: null,
 
   clearError: () => set({ error: null }),
+  clearCurrentReport: () => set({ currentReport: null }),
 
   // ── Calendar ─────────────────────────────────────────────────────────────
 
@@ -302,9 +318,119 @@ export const useDutyDaysStore = create<DutyDaysState>((set, get) => ({
     try {
       const params = userId ? { user_id: userId } : {};
       const res = await api.get('/duty-days/logs/', { params });
-      set({ adminLogs: res.data });
+      const logs = Array.isArray(res.data) ? res.data : (res.data.results || []);
+      set({ adminLogs: logs, adminLogsCount: res.data.count ?? logs.length });
     } catch {
       // Silently fail
+    }
+  },
+
+  fetchFilteredAdminLogs: async (filters) => {
+    try {
+      const params: Record<string, string> = {};
+      if (filters?.userId) params.user_id = filters.userId;
+      if (filters?.action) params.action = filters.action;
+      if (filters?.search) params.search = filters.search;
+      if (filters?.startDate) params.start_date = filters.startDate;
+      if (filters?.endDate) params.end_date = filters.endDate;
+
+      const res = await api.get('/duty-days/logs/', { params });
+      const logs = Array.isArray(res.data) ? res.data : (res.data.results || []);
+      set({ adminLogs: logs, adminLogsCount: res.data.count ?? logs.length });
+    } catch {
+      set({ error: 'Eroare la încărcarea jurnalului de activitate.' });
+    }
+  },
+
+  exportAdminLogsExcel: async (filters) => {
+    try {
+      const params: Record<string, string> = {};
+      if (filters?.userId) params.user_id = filters.userId;
+      if (filters?.action) params.action = filters.action;
+      if (filters?.search) params.search = filters.search;
+      if (filters?.startDate) params.start_date = filters.startDate;
+      if (filters?.endDate) params.end_date = filters.endDate;
+
+      const res = await api.get('/duty-days/logs/export/', {
+        params,
+        responseType: 'blob',
+      });
+      const blob = new Blob([res.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Jurnal_Audit_DutyDays_${new Date().toISOString().slice(0, 10)}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      set({ error: 'Eroare la exportul jurnalului de audit.' });
+    }
+  },
+
+  fetchUserReport: async (userId, year) => {
+    set({ isLoadingReport: true });
+    try {
+      const params: Record<string, any> = {};
+      if (year) params.year = year;
+      const res = await api.get(`/duty-days/users/${userId}/report/`, { params });
+      set({ currentReport: res.data, isLoadingReport: false });
+      return res.data;
+    } catch (err: unknown) {
+      const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
+      set({ error: detail || 'Eroare la încărcarea raportului angajatului.', isLoadingReport: false });
+      return null;
+    }
+  },
+
+  exportUserReportExcel: async (userId, year) => {
+    try {
+      const params: Record<string, any> = {};
+      if (year) params.year = year;
+      const res = await api.get(`/duty-days/users/${userId}/report/export/`, {
+        params,
+        responseType: 'blob',
+      });
+      const blob = new Blob([res.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Raport_Angajat_${userId}_${year || 'total'}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      set({ error: 'Eroare la descărcarea raportului Excel.' });
+    }
+  },
+
+  exportAllUsersReportExcel: async (year) => {
+    try {
+      const params: Record<string, any> = {};
+      if (year) params.year = year;
+      const res = await api.get('/duty-days/reports/all-users/export/', {
+        params,
+        responseType: 'blob',
+      });
+      const blob = new Blob([res.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Raport_Centralizator_Zile_Serviciu_${year || 'total'}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      set({ error: 'Eroare la descărcarea raportului centralizator.' });
     }
   },
 
@@ -316,6 +442,14 @@ export const useDutyDaysStore = create<DutyDaysState>((set, get) => ({
       });
       await get().fetchAllBalances();
       await get().fetchMyData();
+      // Refresh calendar leaves so the absence dot appears immediately
+      const { calendarYear, calendarMonth } = get();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const lastDay = new Date(calendarYear, calendarMonth, 0).getDate();
+      await get().fetchCalendarLeaves(
+        `${calendarYear}-${pad(calendarMonth)}-01`,
+        `${calendarYear}-${pad(calendarMonth)}-${pad(lastDay)}`
+      );
       return true;
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;

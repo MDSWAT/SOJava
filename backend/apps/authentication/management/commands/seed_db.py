@@ -54,6 +54,15 @@ class Command(BaseCommand):
             ('duty_days:view', 'duty_days', 'Poate vedea calendarul zilelor de serviciu'),
             ('duty_days:assign', 'duty_days', 'Poate selecta zile de serviciu'),
             ('duty_days:manage', 'duty_days', 'Poate gestiona complet zilele de serviciu'),
+
+            # Inventory permissions
+            ('inventory:view', 'inventory', 'Poate vedea modulul de inventar'),
+            ('inventory:manage', 'inventory', 'Poate adăuga, edita și șterge obiecte din inventar'),
+
+            # Virtual ECC permissions
+            ('virtual_ecc:view', 'virtual_ecc', 'Vizualizare Echipamente de Casă Virtuale'),
+            ('virtual_ecc:manage', 'virtual_ecc', 'Administrare Echipamente de Casă Virtuale'),
+            ('virtual_ecc:reveal', 'virtual_ecc', 'Dezvăluire Cheie MEV'),
         ]
 
         created_count = 0
@@ -86,13 +95,14 @@ class Command(BaseCommand):
         admin_perms = Permission.objects.exclude(code__in=['users:manage', 'roles:manage'])
         admin_role.permissions.set(admin_perms)
 
-        # Operator — vault read + copy, personal vault
+        # Operator — vault read + copy, personal vault, inventory view
         operator_role, _ = Role.objects.get_or_create(
             name='Operator',
             defaults={'description': 'Operator cu acces la vault', 'is_system': True}
         )
         operator_perms = Permission.objects.filter(
-            code__in=['vault:view', 'vault:copy', 'personal_vault:view', 'personal_vault:manage', 'duty_days:view', 'duty_days:assign']
+            code__in=['vault:view', 'vault:copy', 'personal_vault:view', 'personal_vault:manage',
+                      'duty_days:view', 'duty_days:assign', 'inventory:view']
         )
         operator_role.permissions.set(operator_perms)
 
@@ -102,7 +112,8 @@ class Command(BaseCommand):
             defaults={'description': 'Utilizator standard - acces minim', 'is_system': True}
         )
         user_perms = Permission.objects.filter(
-            code__in=['personal_vault:view', 'personal_vault:manage', 'duty_days:view', 'duty_days:assign']
+            code__in=['personal_vault:view', 'personal_vault:manage',
+                      'duty_days:view', 'duty_days:assign', 'inventory:view']
         )
         user_role.permissions.set(user_perms)
 

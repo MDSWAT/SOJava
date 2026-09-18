@@ -30,6 +30,9 @@ INSTALLED_APPS = [
     'apps.personal_vault.apps.PersonalVaultConfig',
     'apps.audit.apps.AuditConfig',
     'apps.duty_days.apps.DutyDaysConfig',
+    'apps.inventory.apps.InventoryConfig',
+    'apps.virtual_ecc.apps.VirtualEccConfig',
+    'apps.posta_contacts.apps.PostaContactsConfig',
 ]
 
 MIDDLEWARE = [
@@ -122,7 +125,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Media files (uploaded images — inventory photos etc.)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Upload and request payload constraints
+DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000  # 500 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 524288000  # 500 MB
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
 # Celery & Redis
 CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')

@@ -117,7 +117,7 @@ export const CommandPalette: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-slate-900/70 dark:bg-slate-950/70 backdrop-blur-sm"
           />
 
           {/* Search container */}
@@ -126,10 +126,10 @@ export const CommandPalette: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className="w-full max-w-xl glass-panel bg-slate-900/90 dark:bg-slate-900/95 border-slate-800 rounded-2xl overflow-hidden shadow-2xl relative flex flex-col max-h-[50vh]"
+            className="w-full max-w-xl glass-panel bg-white/90 dark:bg-slate-900/95 border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-2xl relative flex flex-col max-h-[50vh]"
           >
             {/* Search Input bar */}
-            <div className="flex items-center gap-3 px-4 py-3.5 border-b border-slate-800">
+            <div className="flex items-center gap-3 px-4 py-3.5 border-b border-slate-200 dark:border-slate-800">
               <Search className="w-5 h-5 text-slate-400 flex-shrink-0" />
               <input
                 ref={inputRef}
@@ -140,9 +140,9 @@ export const CommandPalette: React.FC = () => {
                   setQuery(e.target.value);
                   setSelectedIndex(0);
                 }}
-                className="bg-transparent border-none text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-0 w-full text-sm font-sans"
+                className="bg-transparent border-none text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-0 w-full text-sm font-sans"
               />
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 bg-slate-800 border border-slate-700 text-slate-400 text-[10px] font-bold px-1.5 py-0.5 rounded select-none">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-[10px] font-bold px-1.5 py-0.5 rounded select-none">
                 ESC
               </kbd>
             </div>
@@ -177,8 +177,8 @@ export const CommandPalette: React.FC = () => {
                           onMouseEnter={() => setSelectedIndex(globalIdx)}
                           className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-150 ${
                             isSelected
-                              ? 'bg-sidesi-500/20 border-l-4 border-l-sidesi-500 text-white'
-                              : 'text-slate-350 hover:bg-slate-800/40 border-l-4 border-l-transparent'
+                              ? 'bg-sidesi-500/20 border-l-4 border-l-sidesi-500 text-slate-900 dark:text-white'
+                              : 'text-slate-600 dark:text-slate-350 hover:bg-slate-100 dark:hover:bg-slate-800/40 border-l-4 border-l-transparent'
                           }`}
                         >
                           <div className="flex items-center gap-3">
@@ -204,12 +204,12 @@ export const CommandPalette: React.FC = () => {
             </div>
 
             {/* Guide footer */}
-            <div className="px-4 py-2 bg-slate-950/60 border-t border-slate-800/60 flex justify-between items-center text-[10px] text-slate-500 select-none">
+            <div className="px-4 py-2 bg-slate-50 dark:bg-slate-950/60 border-t border-slate-200 dark:border-slate-800/60 flex justify-between items-center text-[10px] text-slate-500 select-none">
               <span className="flex items-center gap-1">
-                Navighează cu <kbd className="bg-slate-800 px-1 rounded">↑</kbd> <kbd className="bg-slate-800 px-1 rounded">↓</kbd>
+                Navighează cu <kbd className="bg-slate-100 dark:bg-slate-800 px-1 rounded">↑</kbd> <kbd className="bg-slate-100 dark:bg-slate-800 px-1 rounded">↓</kbd>
               </span>
               <span>
-                Apăsați <kbd className="bg-slate-800 px-1 rounded">Enter</kbd> pentru a selecta
+                Apăsați <kbd className="bg-slate-100 dark:bg-slate-800 px-1 rounded">Enter</kbd> pentru a selecta
               </span>
             </div>
           </motion.div>

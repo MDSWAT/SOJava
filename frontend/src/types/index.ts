@@ -11,6 +11,7 @@ export interface RoleDetail {
   description: string;
   permissions: Permission[];
   is_system: boolean;
+  users_count?: number;
 }
 
 export interface User {
@@ -184,7 +185,7 @@ export interface LeaveRequest {
   id: string;
   user: string;
   user_detail: { id: string; username: string; full_name: string };
-  leave_type: 'rest' | 'study' | 'medical' | 'unpaid' | 'other';
+  leave_type: 'rest' | 'study' | 'medical' | 'unpaid' | 'other' | 'absence';
   leave_type_display: string;
   start_date: string;   // YYYY-MM-DD
   end_date: string;     // YYYY-MM-DD
@@ -241,6 +242,7 @@ export interface SaturdayBooking {
   comp_option?: 'recovery' | 'decide_later' | 'free_day';
   comp_option_display?: string;
   recovery_date?: string | null;
+  free_day_credited?: boolean;
   booked_at: string;
 }
 
@@ -309,3 +311,164 @@ export interface UserBalanceKPI {
   saturdays_booked: number;
   saturdays_booked_upcoming: number;
 }
+
+export interface ReportTimelineItem {
+  id: string;
+  event_type: 'leave' | 'free_day' | 'saturday';
+  category: string;
+  title: string;
+  date_display: string;
+  start_date: string;
+  end_date: string | null;
+  duration_days: number;
+  status: string;
+  status_display: string;
+  notes: string;
+  details: string;
+  approved_by: string;
+  timestamp: string;
+}
+
+export interface ReportKPI {
+  total_leaves: number;
+  leaves_by_type: {
+    rest: number;
+    medical: number;
+    study: number;
+    unpaid: number;
+    absence: number;
+    other: number;
+  };
+  free_days_taken: number;
+  saturdays_served: number;
+  saturdays_upcoming: number;
+  current_free_days_balance: number;
+  current_days_to_recover: number;
+}
+
+export interface UserDetailedReport {
+  user: SimpleUser;
+  year_filter: number | null;
+  balance: {
+    days_to_recover: number;
+    free_days_available: number;
+    updated_at: string;
+  };
+  kpi: ReportKPI;
+  timeline: ReportTimelineItem[];
+  leaves: any[];
+  free_days: any[];
+  saturdays: any[];
+  activity_logs: ActivityLog[];
+}
+
+export interface PaginatedActivityLogs {
+  count: number;
+  limit: number;
+  results: ActivityLog[];
+}
+
+
+export interface Raion {
+  id: string;
+  name: string;
+  code: string;
+  color: string;
+  ecc_count: number;
+  created_at: string;
+}
+
+export interface RaionStats {
+  raioane: Raion[];
+  unassigned: number;
+}
+
+export interface VirtualECCItem {
+  id: string;
+  terminal_id: string;
+  oficiu: string;
+  tel_oficiu: string | null;
+  nr_inregistrare_sfs: string | null;
+  nr_ordine: string | null;
+  data_inregistrare: string | null;
+  denumire_entitate: string | null;
+  idno: string | null;
+  model_ecc: string | null;
+  adresa_ecc: string | null;
+  ip_adresa: string | null;
+  masked_mev_key: string;
+  plain_mev_key?: string | null;
+  status: 'neconfigurat' | 'aplicatie_instalata' | 'in_certificare' | 'certificat' | 'eroare_certificare' | 'pus_in_exploatare';
+  raion_id: string | null;
+  raion_detail: Raion | null;
+  comentarii: string | null;
+  pdf_file: string | null;
+  pdf_file_url: string | null;
+  z_raport: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DashboardStatsData {
+  users: {
+    total: number;
+    active: number;
+  };
+  vault: {
+    shared_count: number;
+    personal_count: number;
+  };
+  virtual_ecc: {
+    total: number;
+    by_status: {
+      pus_in_exploatare: number;
+      neconfigurat: number;
+      certificat: number;
+      in_certificare: number;
+      eroare_certificare: number;
+      aplicatie_instalata: number;
+    };
+    with_ip: number;
+    without_ip: number;
+    with_mev: number;
+    without_mev: number;
+    z_raport_count: number;
+  };
+  posta_contacts: {
+    total_contacts: number;
+    total_raioane: number;
+    ingineri_count: number;
+    oficii_count: number;
+  };
+  duty_days: {
+    next_duty: {
+      date: string;
+      user_name: string;
+      is_booked: boolean;
+      label: string;
+    } | null;
+    active_leaves_today: number;
+    upcoming_leaves_count: number;
+  };
+  inventory: {
+    total_items: number;
+  };
+  chart_data: Array<{
+    date: string;
+    name: string;
+    reveals: number;
+    copies: number;
+    updates: number;
+    logins: number;
+    total: number;
+  }>;
+  recent_logs: Array<{
+    id: string;
+    username_display: string;
+    action: string;
+    module: string;
+    details: any;
+    created_at: string;
+  }>;
+}
+

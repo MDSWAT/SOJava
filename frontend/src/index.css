@@ -3,75 +3,140 @@
 @tailwind utilities;
 
 @layer base {
-  /* Elegant, sleek custom scrollbar for enterprise feel */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+  /* Viewport: prevent text scale on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
-  
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 dark:bg-slate-800 rounded-full hover:bg-slate-400 dark:hover:bg-slate-700 transition-colors duration-150;
+    @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400 dark:bg-slate-600;
   }
 
   body {
-    background-image: radial-gradient(at 0% 0%, rgba(30, 41, 59, 0.15) 0, transparent 50%),
-                      radial-gradient(at 50% 0%, rgba(0, 127, 255, 0.05) 0, transparent 50%);
+    background-image:
+      radial-gradient(at 0% 0%, rgba(30, 41, 59, 0.15) 0, transparent 50%),
+      radial-gradient(at 50% 0%, rgba(0, 127, 255, 0.05) 0, transparent 50%);
+    /* Prevent horizontal overflow on mobile */
+    overflow-x: hidden;
   }
 
-  body.dark {
-    background-image: radial-gradient(at 0% 0%, rgba(15, 23, 42, 0.9) 0, transparent 50%),
-                      radial-gradient(at 50% 0%, rgba(0, 127, 255, 0.08) 0, transparent 50%);
+  .dark body {
+    background-image:
+      radial-gradient(at 0% 0%, rgba(15, 23, 42, 0.9) 0, transparent 50%),
+      radial-gradient(at 50% 0%, rgba(0, 127, 255, 0.08) 0, transparent 50%);
+  }
+
+  /* Smooth tap highlight removal on mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
 @layer components {
-  /* Premium Glassmorphism styling blocks */
+  /* ── Glassmorphism panels ─────────────────────────────────────────────── */
   .glass-panel {
     @apply bg-white/70 dark:bg-slate-850/60 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/40 shadow-lg shadow-slate-900/5 dark:shadow-black/20;
   }
-
   .glass-panel-hover {
     @apply hover:bg-white/80 dark:hover:bg-slate-850/85 hover:border-slate-300/60 dark:hover:border-slate-800/80 transition-all duration-200;
   }
 
+  /* ── Inputs ───────────────────────────────────────────────────────────── */
   .glass-input {
-    @apply bg-white/50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sidesi-500/50 focus:border-sidesi-500 backdrop-blur-sm transition-all duration-150;
+    @apply bg-white/50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800
+           text-slate-900 dark:text-slate-100 rounded-lg py-2 px-3
+           focus:outline-none focus:ring-2 focus:ring-sidesi-500/50 focus:border-sidesi-500
+           backdrop-blur-sm transition-all duration-150
+           /* Mobile: prevent zoom on focus (font-size must be >= 16px) */
+           text-[16px] md:text-xs;
   }
 
+  /* ── Buttons ──────────────────────────────────────────────────────────── */
   .glass-button-primary {
-    @apply bg-sidesi-500 hover:bg-sidesi-600 text-white font-medium py-2 px-4 rounded-lg shadow-lg shadow-sidesi-500/10 hover:shadow-sidesi-500/25 active:scale-95 transition-all duration-150 flex items-center justify-center gap-2;
+    @apply bg-sidesi-500 hover:bg-sidesi-600 active:bg-sidesi-700
+           text-white font-medium py-2 px-4 rounded-lg
+           shadow-lg shadow-sidesi-500/10 hover:shadow-sidesi-500/25
+           active:scale-95 transition-all duration-150
+           flex items-center justify-center gap-2
+           touch-manipulation;
   }
-
   .glass-button-secondary {
-    @apply bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/70 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-700/50 font-medium py-2 px-4 rounded-lg active:scale-95 transition-all duration-150 flex items-center justify-center gap-2;
+    @apply bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/70 dark:hover:bg-slate-800
+           text-slate-800 dark:text-slate-200
+           border border-slate-200/50 dark:border-slate-700/50
+           font-medium py-2 px-4 rounded-lg
+           active:scale-95 transition-all duration-150
+           flex items-center justify-center gap-2
+           touch-manipulation;
   }
 
   .glass-card-header {
     @apply border-b border-slate-200/50 dark:border-slate-800/40 pb-4 mb-4;
   }
-  
-  /* Timeline node styling */
+
+  /* ── Timeline ─────────────────────────────────────────────────────────── */
   .timeline-border {
     background-image: linear-gradient(to bottom, #3b82f6 30%, rgba(255, 255, 255, 0) 0%);
     background-position: left;
     background-size: 2px 10px;
     background-repeat: repeat-y;
   }
+
+  /* ── Responsive table scroll hint on mobile ───────────────────────────── */
+  .table-scroll-hint {
+    @apply relative overflow-x-auto;
+  }
+  .table-scroll-hint::after {
+    content: '';
+    @apply md:hidden absolute top-0 right-0 bottom-0 w-8 pointer-events-none;
+    background: linear-gradient(to left, rgba(15,23,42,0.4), transparent);
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* ── Card list item (used on mobile instead of tables) ────────────────── */
+  .mobile-card-item {
+    @apply glass-panel rounded-xl p-3 space-y-2 flex flex-col;
+  }
 }
 
-/* Beautiful dynamic background grid */
+/* ── Background grid ────────────────────────────────────────────────────── */
 .bg-grid-pattern {
   background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(0, 127, 255, 0.03) 1px, transparent 1px),
+  background-image:
+    linear-gradient(to right,  rgba(0, 127, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 127, 255, 0.03) 1px, transparent 1px);
 }
 .dark .bg-grid-pattern {
-  background-image: 
-    linear-gradient(to right, rgba(0, 127, 255, 0.015) 1px, transparent 1px),
+  background-image:
+    linear-gradient(to right,  rgba(0, 127, 255, 0.015) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 127, 255, 0.015) 1px, transparent 1px);
+}
+
+/* ── Safe-area utilities (notch / home-indicator on iOS) ────────────────── */
+.safe-area-pb  { padding-bottom: env(safe-area-inset-bottom); }
+.safe-area-pt  { padding-top:    env(safe-area-inset-top); }
+.safe-area-pl  { padding-left:   env(safe-area-inset-left); }
+.safe-area-pr  { padding-right:  env(safe-area-inset-right); }
+
+/* ── Touch action improvements ──────────────────────────────────────────── */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  /* Only contain horizontal overscroll — vertical wheel must chain to the page */
+  overscroll-behavior-x: contain;
+}
+
+/* ── Animations ─────────────────────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out both;
 }
