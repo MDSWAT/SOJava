@@ -74,3 +74,6 @@ test_*.py
 clear_vault*.py
 clear_vault*.bat
 clear_vault*.ps1
+
+*.class
+
