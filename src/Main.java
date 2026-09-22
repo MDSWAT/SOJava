@@ -67,8 +67,8 @@ public class Main {
                 }, 5000L);
                 timer2 = new Timer();
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(11, 16);
-                calendar.set(12, 13);
+                calendar.set(11, 17);
+                calendar.set(12, 34);
                 calendar.set(13, 0);
                 Date timp = calendar.getTime();
                 if (timp.before(new Date())) {
@@ -117,7 +117,7 @@ public class Main {
 
             if (timer3 != null) {
                 timer3.cancel();
-                timer3 = null;
+                timer3 = null;//comentariu
             }
 
             statusLabel.setText("Timerele au fost oprite.");
