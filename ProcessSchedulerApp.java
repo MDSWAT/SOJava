@@ -10,6 +10,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * Stefan a facut un prigram
+ * 
  * Lucrare de laborator nr. 1
  * Tema: Elaborarea unui mecanism de planificare a activitatii proceselor utilizand Timer-ul.
  *
