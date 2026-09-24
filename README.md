@@ -1,66 +1,47 @@
-# Laborator 1 - Tehnici de Programare a Sistemelor de Operare (SO)
+# Lucrări de Laborator - Facultate
 
-## Tema lucrării
-**Elaborarea unui mecanism de planificare a activității proceselor utilizând Timer-ul. Utilizarea mediului Git în grup.**
-
----
-
-## 🎯 Obiective și Cerințe
-Aplicația implementează planificarea proceselor folosind clasele standard Java `java.util.Timer` și `java.util.TimerTask`, acoperind toate cele 3 moduri specificate în sarcina de laborator:
-1. **Reacție la un anumit interval de timp (Delay / One-shot)**: Execută sarcina o singură dată după scurgerea numărului de secunde specificat de utilizator.
-2. **Reacție la un anumit timp (Ora / Data exactă)**: Execută sarcina la un moment calendaristic precis (`java.util.Date` și `java.util.Calendar`).
-3. **Reacție cu o perioadă indicată (Repetitiv / Period)**: Execută sarcina la intervale regulate de timp (folosind `scheduleAtFixedRate`), actualizând progresul și starea procesului.
-
-În plus, conform Criteriului 4 de evaluare, proiectul include o **interfață grafică completă (Java Swing GUI)** cu panouri interactive, butoane de start/oprire forțată (`cancel()`), bară de progres și jurnal de evenimente în timp real.
+Acest depozit conține lucrările practice și proiectele de laborator pentru disciplinele universitare:
 
 ---
 
-## 📁 Structura Fișierelor
-- `ProcessSchedulerApp.java` - Aplicația completă cu Interfață Grafică (GUI) Swing.
-- `TimerConsoleApp.java` - Versiune demonstrativă pentru consolă / terminal.
-- `README.md` - Documentația proiectului și instrucțiunile de rulare.
-- `RAPORT_LAB1.md` - Șablonul complet de raport pentru predare (conține răspunsurile la întrebările de verificare și capturile de ecran).
+## 📂 Structura Repozitoriului
+
+```text
+├── SO/                              # Sisteme de Operare
+│   └── Lab 1/                       # Laborator 1: Planificarea proceselor cu Timer
+│       ├── ProcessSchedulerApp.java # Aplicație cu interfață grafică (Swing)
+│       ├── TimerConsoleApp.java     # Aplicație consolă demonstrativă
+│       ├── RAPORT_LAB1.md           # Raport laborator 1
+│       └── README.md                # Ghid detaliat rulare Laborator 1
+│
+├── PCD/                             # Programare Concurentă și Distribuită
+│   └── .gitkeep                     # (Pregătit pentru viitoarele laboratoare)
+│
+├── push_to_github.bat               # Script automat pentru încărcare pe GitHub
+└── README.md                        # Documentația principală a depozitului
+```
 
 ---
 
-## 🚀 Compilare și Rulare
+## 💻 Discipline
 
-### 1. Rularea Aplicației cu Interfață Grafică (GUI)
+### 1. [SO (Sisteme de Operare)](file:///SO/)
+- **[Lab 1](file:///SO/Lab%201/)**: Mecanisme de planificare a activității proceselor utilizând clasa `Timer` din Java (One-shot Delay, Oră fixă, Rulare repetitivă periodică) cu interfață grafică completă (Java Swing GUI).
+
+### 2. [PCD (Programare Concurentă și Distribuită)](file:///PCD/)
+- Spațiu pregătit pentru temele și lucrările de laborator la disciplina PCD.
+
+---
+
+## 🚀 Ghid Rapid de Rulare (Laborator 1 - SO)
+
+Navighează în folderul laboratorului:
+```bash
+cd "SO/Lab 1"
+```
+
+Compilare și lansare interfață grafică:
 ```bash
 javac ProcessSchedulerApp.java
 java ProcessSchedulerApp
-```
-
-### 2. Rularea Aplicației în Consolă
-```bash
-javac TimerConsoleApp.java
-java TimerConsoleApp
-```
-
----
-
-## 🛠️ Comenzi Git Recomandate pentru Laborator
-
-### 1. Inițializare depozit local
-```bash
-git init
-git branch -M main
-```
-
-### 2. Adăugare fișiere și primul commit
-```bash
-git add .
-git commit -m "feat: Implementare planificator procese cu Timer si interfata Swing (Lab 1)"
-```
-
-### 3. Crearea unei ramuri separate (pentru lucrul în echipă)
-```bash
-git checkout -b feature/timer-scheduler
-```
-
-### 4. Conectarea la depozitul GitHub și publicarea codului (Push)
-```bash
-git remote add origin https://github.com/<UTILIZATOR_GITHUB>/<NUME_REPO>.git
-git push -u origin main
-git push -u origin feature/timer-scheduler
 ```

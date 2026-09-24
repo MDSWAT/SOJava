@@ -1,1 +1,0 @@
-# Virtual ECC package

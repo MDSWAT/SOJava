@@ -1,1 +1,0 @@
-# Personal Vault app package
